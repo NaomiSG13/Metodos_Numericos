@@ -12,4 +12,4 @@ public class SecanteAbierto {
         }
         System.out.println("Nota: Diverge porque f(x)=x^2+4 no toca el eje X.");
     }
-}G
+}
