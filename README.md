@@ -17,5 +17,7 @@ Este repositorio contiene las prácticas y ejercicios realizados durante el seme
 | **03** | Sistemas de Ecuaciones Lineales |  |
 | **04** | Diferenciación e Integración Numérica | |
 | **05** | Solución de Ecuaciones Diferenciales |  |
+| **06** | Tema pendiente |  |
+
 
 ---
