@@ -15,4 +15,4 @@ public class GaussSeidel {
             System.out.printf("%d | %.4f | %.4f | %.4f\n", i, x1, x2, x3);
         }
     }
-}G
+}

@@ -1,4 +1,4 @@
-public class GaussSeidel {
+public class GaussSeidel1 {
     public static void main(String[] args) {
         // Sistema de ecuaciones del Ejercicio 1 de tu guía (3x3)
         // ec1: 12.350x + 1.836y + 5.481z = -6.152

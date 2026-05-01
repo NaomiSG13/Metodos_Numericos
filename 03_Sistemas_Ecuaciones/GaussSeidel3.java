@@ -1,4 +1,4 @@
-public class GaussSidel3 {
+public class GaussSeidel3 {
     public static void main(String[] args) {
         // Sistema: x+y+z+w=10 | 2x+3y+z+5w=31 | -x+y-z+w=-2 | 3x+y+2z+4w=28
         double[][] matriz = {

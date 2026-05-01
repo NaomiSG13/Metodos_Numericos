@@ -1,4 +1,4 @@
-public class GaussSidel4 {
+public class GaussSeidel4 {
     public static void main(String[] args) {
         double[][] A = {
             {27.288, -2.597, 8.818, 8.692, 0.136},

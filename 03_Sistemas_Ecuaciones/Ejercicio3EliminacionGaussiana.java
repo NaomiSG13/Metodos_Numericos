@@ -1,26 +1,38 @@
-Ejercicio3EliminacionGaussiana {
+public class Ejercicio3EliminacionGaussiana {
+
     public static void main(String[] args) {
-        double[][] matriz = {
-            {1, 2, -1, 3, 9},
-            {2, -1, 1, 1, 8},
-            {3, 1, -2, 2, 3},
-            {1, 3, 2, -1, 10}
+        // Datos del Ejercicio 3 (Asegúrate de que estos sean los de tu PDF)
+        double[][] a = {
+            {4.0, 1.0, -1.0, 1.0, -2.0},
+            {1.0, 4.0, -1.0, -1.0, -1.0},
+            {-1.0, -1.0, 4.0, 1.0, 4.0},
+            {1.0, -1.0, 1.0, 4.0, 2.0}
         };
-        
-        int n = matriz.length;
+        int n = a.length;
+
+        // Fase de eliminación
         for (int i = 0; i < n; i++) {
-            double pivote = matriz[i][i];
-            for (int j = 0; j <= n; j++) matriz[i][j] /= pivote;
-            for (int k = 0; k < n; k++) {
-                if (k != i) {
-                    double factor = matriz[k][i];
-                    for (int j = 0; j <= n; j++) matriz[k][j] -= factor * matriz[i][j];
+            for (int k = i + 1; k < n; k++) {
+                double factor = a[k][i] / a[i][i];
+                for (int j = i; j <= n; j++) {
+                    a[k][j] -= factor * a[i][j];
                 }
             }
         }
-        System.out.println("Solución Ejercicio 3:");
+
+        // Sustitución hacia atrás
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            x[i] = a[i][n];
+            for (int j = i + 1; j < n; j++) {
+                x[i] -= a[i][j] * x[j];
+            }
+            x[i] /= a[i][i];
+        }
+
+        System.out.println("--- RESULTADOS EJERCICIO 3 ---");
         for (int i = 0; i < n; i++) {
-            System.out.printf("x%d = %.6f%n", (i + 1), matriz[i][n]);
+            System.out.printf("x%d = %.4f\n", (i + 1), x[i]);
         }
     }
 }
