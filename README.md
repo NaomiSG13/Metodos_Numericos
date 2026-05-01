@@ -16,7 +16,7 @@ Este repositorio contiene las prácticas y ejercicios realizados durante el seme
 | **02** | Métodos de Solución de Ecuaciones | |
 | **03** | Sistemas de Ecuaciones Lineales |  |
 | **04** | Diferenciación e Integración Numérica | |
-| **05** | Solución de Ecuaciones Diferenciales |  |
+| **05** | Tema en curso |  |
 | **06** | Tema pendiente |  |
 
 
