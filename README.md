@@ -1,7 +1,8 @@
 # Instituto Tecnológico Superior de Oriente del Estado de Hidalgo (ITESA)
 
 ## Información del Estudiante
-* **Nombre:** Naomi Anais Sandoval Godínez
+* **Nombre:** Sandoval Godinez Naomi Anais
+*  **Matricula** 24030253
 * **Materia:** Métodos Numéricos
 * **Carrera:** Ingeniería en Sistemas Computacionales
 
