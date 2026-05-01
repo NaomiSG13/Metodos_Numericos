@@ -13,10 +13,10 @@ Este repositorio contiene las prácticas y ejercicios realizados durante el seme
 
 | Unidad | Título del Tema | Estado |
 | :--- | :--- | :--- |
-| **01** | Introducción a los Métodos Numéricos |  |
-| **02** | Métodos de Solución de Ecuaciones | |
-| **03** | Sistemas de Ecuaciones Lineales |  |
-| **04** | Diferenciación e Integración Numérica | |
+| **01** | Introducción a los Métodos Numéricos | Completado|
+| **02** | Métodos de Solución de Ecuaciones |Completado |
+| **03** | Sistemas de Ecuaciones Lineales | Completado |
+| **04** | Diferenciación e Integración Numérica | Completado|
 | **05** | Tema en curso |  |
 | **06** | Tema pendiente |  |
 
