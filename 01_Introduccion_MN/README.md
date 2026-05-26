@@ -1,4 +1,4 @@
-# Tema 1: Introducción a los Métodos Numéricos
+# TEMA 1: Introducción a los Métodos Numéricos
 
 En este apartado encontrarás la implementación y ejercicios de los siguientes métodos:
 
