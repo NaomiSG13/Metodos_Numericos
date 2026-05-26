@@ -17,14 +17,14 @@ Este repositorio alberga el portafolio de evidencias y las prácticas de código
 
 A continuación se detallan los temas cubiertos durante el semestre y el estado actual de las entregas:
 
-| Unidad | Título del Tema | Estado | Recursos |
+| Unidad | Título del Tema | Estado 
 | :---: | :--- | :---: | :---: |
-| **01** | Introducción a los Métodos Numéricos | 🟢 Completado |
-| **02** | Métodos de Solución de Ecuaciones | 🟢 Completado |
-| **03** | Sistemas de Ecuaciones Lineales | 🟢 Completado | 
-| **04** | Diferenciación e Integración Numérica | 🟢 Completado | 
-| **05** | Interpolación y Ajuste de Funciones | 🟡 En Desarrollo | 
-| **06** | *Tema por definir* | ⚪ Pendiente | 
+| **01** | Introducción a los Métodos Numéricos | 🟢 Completado 
+| **02** | Métodos de Solución de Ecuaciones | 🟢 Completado 
+| **03** | Sistemas de Ecuaciones Lineales | 🟢 Completado 
+| **04** | Diferenciación e Integración Numérica | 🟢 Completado 
+| **05** | Interpolación y Ajuste de Funciones | 🟡 En Desarrollo  
+| **06** | *Tema por definir* | ⚪ Pendiente 
 
 ---
 
