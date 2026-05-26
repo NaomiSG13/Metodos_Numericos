@@ -4,7 +4,7 @@ Este repositorio alberga el portafolio de evidencias y las prácticas de código
 
 ---
 
-## 🧑‍💻 Información del Estudiante
+##  Información del Estudiante 
 
 * **Nombre:** Sandoval Godinez Naomi Anais
 * **Matrícula:** `24030253`
