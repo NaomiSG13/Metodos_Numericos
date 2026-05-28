@@ -118,7 +118,7 @@ El método de Bisección es ideal como primera opción cuando no se conocen las 
 ### 🎯 Objetivo
 Acelerar la convergencia del método de bisección aprovechando los valores numéricos de los extremos del intervalo.
 
-### 📝 Descripción del Método
+### 📝 Descripciógit an del Método
 A diferencia de bisección, que corta el intervalo estrictamente por la mitad, la Falsa Posición traza una línea recta (secante) entre los puntos de los extremos. La intersección de esta línea con el eje horizontal se convierte en la nueva aproximación de la raíz.
 
 ### 🔢 Fórmula General
