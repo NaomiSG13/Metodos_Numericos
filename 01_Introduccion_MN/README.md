@@ -11,6 +11,7 @@ En este apartado encontrarás la implementación y ejercicios de los siguientes 
 ### 📉 Análisis de Errores
 La precisión es fundamental en el cálculo numérico. En cada ejercicio se detallan:
 
+
 1. **Error Absoluto:** $E_a = |V_{real} - V_{aproximado}|$
 2. **Error Relativo:** $E_r = \frac{|V_{real} - V_{aproximado}|}{|V_{real}|}$
 3. **Error Porcentual:** $E_p = E_r \times 100\%$
