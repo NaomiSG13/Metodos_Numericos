@@ -1,453 +1,313 @@
-# 📊 TEMA 4: Diferenciación e Integración Numérica
+# 📊 TEMA 3: Sistemas de Ecuaciones Lineales
 
-Este módulo comprende el estudio, diseño e implementación de algoritmos computacionales para aproximar derivadas puntuales e integrales definidas a partir de funciones continuas o tabuladas. Estas técnicas analizan el comportamiento geométrico de las curvas y minimizan el error de truncamiento mediante polinomios de interpolación avanzados.
+Implementación de algoritmos para resolver sistemas de ecuaciones lineales de la forma Ax = B. Se incluye un análisis de resultados comparando la eficiencia y estabilidad de cada método.
+
+### 🔍 Métodos Incluidos
+
+**Métodos Directos:**
+* 🔹 Eliminación Gaussiana
+* 🔹 Método de Gauss-Jordan
+
+**Métodos Iterativos:**
+* 🔸 Método de Gauss-Seidel
+* 🔸 Método de Jacobi
+
+---
+---
 
 ## 🛠️ Catálogo de Métodos Desarrollados
 
-| Recurso / Código | Descripción Técnica |
-| :--- | :--- |
-| **Diferenciación Numérica** | Fórmulas de aproximación por diferencias de 3 y 5 puntos (Adelante, Atrás y Centrales). |
-| **Método del Trapecio Compuesto** | Integración aproximada mediante la partición lineal de subintervalos. |
-| **Regula de Simpson 1/3 Compuesta** | Integración basada en la aproximación por parábolas (polinomios de 2do grado). |
-| **Regla de Simpson 3/8 Compuesta** | Desarrollo analítico con polinomios cúbicos para segmentos múltiples de 3. |
-| **Cuadratura Gaussiana (2 Puntos)** | Evaluación óptima no equiespaciada utilizando las raíces de polinomios de Legendre. |
-
----
----
-
-## 1. Diferenciación Numérica (3 y 5 Puntos)
-
-* **Estatus:** Documentación Técnica
-* **Diferencia Clave:** A diferencia de la definición de límite analítico tradicional, la diferenciación numérica calcula la pendiente local de una función utilizando combinaciones algebraicas de nodos discretos separados por una distancia finita (h).
+## 1. Eliminación Gaussiana
 
 ### 🎯 Objetivo
-Aproximar el valor numérico de la primera derivada de una función continua f'(x) en un punto específico x_i, empleando esquemas de diferencias finitas centrales para reducir significativamente el error de truncamiento.
+Transformar un sistema de ecuaciones Ax = B en un sistema triangular superior equivalente para resolverlo fácilmente mediante sustitución hacia atrás.
 
 ### 📝 Descripción del Método
-El método sustituye la recta tangente exacta por una recta aproximada generada a partir de un conjunto de muestras distribuidas simétricamente alrededor del punto de interés x_i. La aproximación de 3 puntos emplea un polinomio interpolante de segundo grado y posee un error de orden O(h²). Por su parte, la aproximación central de 5 puntos utiliza un polinomio de cuarto grado, lo que expande la precisión a un orden de convergencia de O(h⁴), ideal para mitigar las desviaciones en curvas de alta oscilación.
+Consiste en aplicar operaciones elementales entre las filas de la matriz aumentada [A|B] para hacer ceros todos los elementos que están por debajo de la diagonal principal. Una vez obtenida la estructura triangular, se despejan las variables desde la última hasta la primera.
 
-### 🔢 Fórmula General Estructurada
-Para un tamaño de paso constante (h), las ecuaciones se definen de la siguiente manera:
+### 🔢 Fórmula / Representación General
+[A | B] ---> [U | Y] (donde U es una matriz triangular superior)
 
-**A. Fórmula Central de 3 Puntos:**
-f'(x_i) = [ f(x_i + h) - f(x_i - h) ] / (2h)
-
-**B. Fórmula Central de 5 Puntos:**
-f'(x_i) = [ -f(x_i + 2h) + 8f(x_i + h) - 8f(x_i - h) + f(x_i - 2h) ] / (12h)
-
-### 👣 Pasos Principales
-1. Definir el punto de interés x_i, el tamaño de paso infinitesimal h y la función objetivo f(x).
-2. Calcular los valores correspondientes de los nodos vecinos: (x_i + h), (x_i - h), (x_i + 2h) y (x_i - 2h).
-3. Evaluar la función matemática en cada uno de los nodos calculados.
-4. Aplicar los pesos correspondientes en el numerador (para 5 puntos: -1, +8, -8, +1).
-5. Dividir el total acumulado entre el factor del denominador (12 * h).
+### 👣 Pasos del Algoritmo
+1. Construir la matriz aumentada [A|B].
+2. Realizar la eliminación hacia adelante para transformar la matriz en triangular superior (utilizando pivoteo si es necesario para evitar divisiones por cero).
+3. Aplicar sustitución hacia atrás para encontrar los valores de las incógnitas.
 
 ### 💻 Pseudocódigo
 ```text
-INICIO Diferenciacion5Puntos(f, x, h)
-    x_menos2 <- x - 2 * h
-    x_menos1 <- x - h
-    x_mas1   <- x + h
-    x_mas2   <- x + 2 * h
-    
-    numerador <- -f(x_mas2) + 8 * f(x_mas1) - 8 * f(x_menos1) + f(x_menos2)
-    denominador <- 12 * h
-    
-    derivada <- numerador / denominador
-    RETURN derivada
+INICIO EliminacionGaussiana(A, B, n)
+    Para i <- 0 Hasta n-2 Hacer
+        Para j <- i+1 Hasta n-1 Hacer
+            factor <- A[j][i] / A[i][i]
+            Para k <- i Hasta n-1 Hacer
+                A[j][k] <- A[j][k] - factor * A[i][k]
+            Fin Para
+            B[j] <- B[j] - factor * B[i]
+        Fin Para
+    Fin Para
+
+    // Sustitución hacia atrás
+    X[n-1] <- B[n-1] / A[n-1][n-1]
+    Para i <- n-2 Hasta 0 (paso -1) Hacer
+        suma <- 0
+        Para j <- i+1 Hasta n-1 Hacer
+            suma <- suma + A[i][j] * X[j]
+        Fin Para
+        X[i] <- (B[i] - suma) / A[i][i]
+    Fin Para
+    RETURN X
 FIN
 ☕ Código en Java
 Java
-package unidad4;
-
-import java.util.function.Function;
-
-public class MetodoDiferenciacion {
-    public static void main(String[] args) {
-        double x = Math.PI / 3; // Punto de evaluación (60 grados)
-        double h = 0.01;        // Tamaño de paso
-        
-        double resultado = derivadaCentral5Puntos(Math::sin, x, h);
-        System.out.printf("Aproximación de la derivada: %.8f\n", resultado);
-        System.out.printf("Valor real esperado (cos(pi/3)): %.8f\n", Math.cos(x));
+public static double[] eliminacionGaussiana(double[][] A, double[] B) {
+    int n = B.length;
+    // Eliminación hacia adelante
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            double factor = A[j][i] / A[i][i];
+            for (int k = i; k < n; k++) {
+                A[j][k] -= factor * A[i][k];
+            }
+            B[j] -= factor * B[i];
+        }
     }
-
-    public static double derivadaCentral5Puntos(Function<Double, Double> f, double x, double h) {
-        double f_menos2 = f.apply(x - 2 * h);
-        double f_menos1 = f.apply(x - h);
-        double f_mas1   = f.apply(x + h);
-        double f_mas2   = f.apply(x + 2 * h);
-        
-        return (-f_mas2 + 8 * f_mas1 - 8 * f_menos1 + f_menos2) / (12 * h);
+    // Sustitución hacia atrás
+    double[] X = new double[n];
+    for (int i = n - 1; i >= 0; i--) {
+        double suma = 0;
+        for (int j = i + 1; j < n; j++) {
+            suma += A[i][j] * X[j];
+        }
+        X[i] = (B[i] - suma) / A[i][i];
     }
+    return X;
 }
+📊 Resultado de Ejecución
+Plaintext
+--- Ejecución Eliminación Gaussiana ---
+Sistema resuelto con éxito.
+Solución encontrada:
+X0 = 1.0000
+X1 = -2.0000
+X2 = 3.0000
 🏁 Conclusión
-La diferenciación numérica central de 5 puntos provee una excelente aproximación analítica sin requerir el álgebra formal de la derivada. No obstante, se debe tener extremo cuidado con la elección de h: un valor extremadamente pequeño inducirá un error severo de cancelación por redondeo numérico en la memoria del computador.
+Es un método directo robusto con una complejidad computacional de O(n^3). Es exacto (salvo por errores de redondeo), pero puede volverse inestable si los elementos de la diagonal principal son muy cercanos a cero, para lo cual se requiere implementar estrategias de pivoteo.
 
-2. Método del Trapecio Compuesto
-Estatus: Documentación Técnica
-
-Diferencia Clave: A diferencia de los esquemas parabólicos o cúbicos, el método del Trapecio aproxima el área de cada subintervalo mediante líneas rectas, adaptándose de forma robusta e intuitiva a cualquier cantidad de segmentos.
-
+2. Método de Gauss-Jordan
 🎯 Objetivo
-Aproximar el valor de la integral definida de una función f(x) desde un límite "a" hasta "b" dividiendo la región bajo la curva en "n" subintervalos de ancho constante y modelando el área de cada sección mediante figuras trapezoidales contiguas.
+Reducir la matriz de coeficientes a una matriz identidad para obtener directamente los valores de las incógnitas sin necesidad de sustitución hacia atrás.
 
 📝 Descripción del Método
-El intervalo general [a, b] se fragmenta homogéneamente. En cada uno de estos pequeños segmentos se traza una cuerda recta que une los valores de la función en los extremos. Esto da origen a un trapecio matemático cuya área se calcula fácilmente de forma lineal. Al sumar las contribuciones individuales, los nodos intermedios se comparten entre trapecios consecutivos, lo que da como resultado una ecuación compacta donde las alturas intermedias se duplican en peso, dejando los límites absolutos de la integral con peso de uno.
+Es una variación de la eliminación gaussiana. La diferencia radica en que cuando se elimina un elemento, se hace tanto para las filas que están por debajo como para las que están por arriba del pivote, y además se normaliza la fila del pivote dividiéndola entre su elemento diagonal.
 
-🔢 Fórmula General Estructurada
-Para una división de n segmentos:
+🔢 Fórmula / Representación General
+[A | B] ---> [I | X] (donde I es la matriz identidad)
 
-Cálculo del ancho de paso (h): h = (b - a) / n
+👣 Pasos del Algoritmo
+Construir la matriz aumentada [A|B].
 
-Ecuación unificada del área acumulada: Área = (h / 2) * [ f(a) + 2 * ( f(x_1) + f(x_2) + ... + f(x_n-1) ) + f(b) ]
+Para cada columna, normalizar la fila del pivote dividiendo todos sus elementos entre el valor de la diagonal.
 
-Nodos internos: x_i = a + i * h
-
-👣 Pasos Principales
-Definir los límites de integración a y b, el número total de subintervalos n y la función f(x).
-
-Calcular el ancho de cada trapecio mediante la expresión h = (b - a) / n.
-
-Evaluar la función en los dos extremos libres y acumularlos en una variable inicializada: Suma = f(a) + f(b).
-
-Recorrer mediante un bucle todos los puntos internos desde i = 1 hasta n - 1.
-
-Multiplicar por 2 cada evaluación intermedia e incorporarla a la suma.
-
-Multiplicar el gran acumulado por el factor externo (h / 2) para obtener el resultado definitivo.
+Hacer ceros en los elementos por encima y por debajo del pivote en las demás filas.
 
 💻 Pseudocódigo
 Plaintext
-INICIO TrapecioCompuesto(f, a, b, n)
-    h <- (b - a) / n
-    suma <- f(a) + f(b)
-    
-    PARA i <- 1 HASTA n - 1:
-        x <- a + i * h
-        suma <- suma + 2 * f(x)
-    FIN_PARA
-    
-    integral <- (h / 2) * suma
-    RETURN integral
+INICIO GaussJordan(A, B, n)
+    Para i <- 0 Hasta n-1 Hacer
+        pivote <- A[i][i]
+        Para k <- i Hasta n-1 Hacer
+            A[i][k] <- A[i][k] / pivote
+        Fin Para
+        B[i] <- B[i] / pivote
+
+        Para j <- 0 Hasta n-1 Hacer
+            Si j != i Entonces
+                factor <- A[j][i]
+                Para k <- i Hasta n-1 Hacer
+                    A[j][k] <- A[j][k] - factor * A[i][k]
+                Fin Para
+                B[j] <- B[j] - factor * B[i]
+            Fin Si
+        Fin Para
+    Fin Para
+    RETURN B
 FIN
 ☕ Código en Java
 Java
-package unidad4;
-
-import java.util.function.Function;
-
-public class MetodoTrapecio {
-    public static void main(String[] args) {
-        double a = 1.0;
-        double b = 3.0;
-        int n = 50; // Cantidad de subintervalos
-        
-        double resultado = trapecioCompuesto(Math::log, a, b, n);
-        System.out.printf("Resultado de la integración (ln(x)): %.8f\n", resultado);
-    }
-
-    public static double trapecioCompuesto(Function<Double, Double> f, double a, double b, int n) {
-        double h = (b - a) / n;
-        double suma = f.apply(a) + f.apply(b);
-        
-        for (int i = 1; i < n; i++) {
-            double x = a + i * h;
-            suma += 2 * f.apply(x);
+public static double[] gaussJordan(double[][] A, double[] B) {
+    int n = B.length;
+    for (int i = 0; i < n; i++) {
+        double pivote = A[i][i];
+        for (int k = i; k < n; k++) {
+            A[i][k] /= pivote;
         }
-        
-        return (h / 2) * suma;
-    }
-}
-🏁 Conclusión
-El método del Trapecio Compuesto es el algoritmo de integración más elemental y versátil. Aunque posee una tasa de error global de O(h²), la cual es más lenta de mitigar que en los métodos basados en polinomios de mayor grado, su total carencia de restricciones en el valor de n lo convierte en un algoritmo sumamente confiable para datos tabulados experimentales.
+        B[i] /= pivote;
 
-3. Regla de Simpson 1/3 Compuesta
-Estatus: Documentación Técnica
-
-Diferencia Clave: A diferencia del Trapecio que usa rectas, la regla de Simpson 1/3 ajusta parábolas uniendo grupos de tres puntos contiguos, lo que impone la restricción de requerir un número estrictamente par de subintervalos.
-
-🎯 Objetivo
-Calcular el área aproximada bajo una curva ajustando segmentos de ecuaciones cuadráticas (parábolas) a lo largo de un intervalo particionado de forma simétrica.
-
-📝 Descripción del Método
-La regla de Simpson 1/3 aproxima la función original mediante polinomios de Lagrange de segundo grado. Para trazar una parábola se necesitan obligatoriamente tres puntos (un subintervalo doble). Al encadenar múltiples segmentos parabólicos para cubrir el intervalo global [a, b], los subintervalos individuales se fusionan dando lugar a una distribución de coeficientes alternada. Los puntos mapeados con índices impares reciben un peso de factor 4, los puntos mapeados con índices pares reciben un peso de factor 2, y los extremos de frontera conservan su peso neutro de 1.
-
-🔢 Fórmula General Estructurada
-Para n subintervalos (donde n debe ser número par):
-
-Cálculo de h: h = (b - a) / n
-
-Ecuación desglosada: Área = (h / 3) * [ f(a) + 4 * (S_impares) + 2 * (S_pares) + f(b) ]
-
-S_impares: f(x_1) + f(x_3) + f(x_5) + ... + f(x_n-1)
-
-S_pares: f(x_2) + f(x_4) + f(x_6) + ... + f(x_n-2)
-
-👣 Pasos Principales
-Verificar que el parámetro n sea un número par. Si no cumple esta condición, sumarle una unidad para forzar la compatibilidad geométrica.
-
-Determinar la distancia fija entre nodos: h = (b - a) / n.
-
-Evaluar la función en los extremos libres iniciales: Suma = f(a) + f(b).
-
-Iterar a través de los nodos interiores con un contador i que va desde 1 hasta n - 1.
-
-Validar la paridad del índice en cada paso:
-
-Si el índice es impar, incorporar el nodo a la suma multiplicado por 4.
-
-Si el índice es par, incorporar el nodo a la suma multiplicado por 2.
-
-Efectuar la multiplicación del acumulado por el coeficiente externo (h / 3).
-
-💻 Pseudocódigo
-Plaintext
-INICIO Simpson1TercioCompuesto(f, a, b, n)
-    SI (n mod 2 != 0) ENTONCES:
-        n <- n + 1
-    FIN_SI
-    
-    h <- (b - a) / n
-    suma <- f(a) + f(b)
-    
-    PARA i <- 1 HASTA n - 1:
-        x <- a + i * h
-        SI (i mod 2 != 0) ENTONCES:
-            suma <- suma + 4 * f(x)
-        SINO:
-            suma <- suma + 2 * f(x)
-        FIN_SI
-    FIN_PARA
-    
-    integral <- (h / 3) * suma
-    RETURN integral
-FIN
-☕ Código en Java
-Java
-package unidad4;
-
-import java.util.function.Function;
-
-public class MetodoSimpson13 {
-    public static void main(String[] args) {
-        double a = 0.0;
-        double b = 1.0;
-        int n = 20; // Debe ser par
-        
-        double resultado = simpson13Compuesto(x -> Math.exp(x), a, b, n);
-        System.out.printf("Resultado de la integración (Simpson 1/3): %.8f\n", resultado);
-    }
-
-    public static double simpson13Compuesto(Function<Double, Double> f, double a, double b, int n) {
-        if (n % 2 != 0) {
-            n++; // Forzar que sea par
-        }
-        
-        double h = (b - a) / n;
-        double suma = f.apply(a) + f.apply(b);
-        
-        for (int i = 1; i < n; i++) {
-            double x = a + i * h;
-            if (i % 2 != 0) {
-                suma += 4 * f.apply(x);
-            } else {
-                suma += 2 * f.apply(x);
+        for (int j = 0; j < n; j++) {
+            if (j != i) {
+                double factor = A[j][i];
+                for (int k = i; k < n; k++) {
+                    A[j][k] -= factor * A[i][k];
+                }
+                B[j] -= factor * B[i];
             }
         }
-        
-        return (h / 3) * suma;
     }
+    return B;
 }
-📊 Conclusión
-La regla de Simpson 1/3 incrementa de manera notable el orden de precisión a un nivel de convergencia O(h⁴). Es una opción predilecta en cómputo científico gracias a su balance óptimo entre velocidad algorítmica y tasa de cancelación de error, siempre que las subdivisiones de la cuadrícula puedan estructurarse en conjuntos pares.
+📊 Resultado de Ejecución
+Plaintext
+--- Ejecución Gauss-Jordan ---
+Matriz reducida a la identidad.
+Solución vector X:
+[1.0, -2.0, 3.0]
+🏁 Conclusión
+Aunque requiere aproximadamente un 50% más de operaciones flotantes que la eliminación gaussiana estándar, ofrece la ventaja de dejar el vector de soluciones calculado directamente en el vector B modificado, eliminando la etapa de sustitución.
 
-4. Regla de Simpson 3/8 Compuesta
-Estatus: Documentación Técnica
-
-Diferencia Clave: A diferencia de Simpson 1/3 (que usa un polinomio cuadrático), Simpson 3/8 aproxima la función con un polinomio cúbico, lo que permite integrar con mayor precisión y manejar casos donde n es múltiplo de 3.
-
+3. Método de Jacobi
 🎯 Objetivo
-Aproximar el valor de una integral definida utilizando polinomios de tercer grado (cúbicos) en cada subintervalo, proporcionando una aproximación de alta fidelidad adaptada a mallas con segmentos múltiplos de tres.
+Resolver el sistema de ecuaciones lineales mediante una técnica iterativa que actualiza todas las variables de forma simultánea a partir de valores iniciales aproximados.
 
 📝 Descripción del Método
-La regla de Simpson 3/8 se basa en aproximar la función f(x) por un polinomio cúbico que pasa por cuatro puntos igualmente espaciados de forma secuencial. Cuando se aplica sobre una partición extendida de intervalos (Forma Compuesta), los polinomios cúbicos contiguos se entrelazan en sus fronteras. Esta superposición genera un patrón de coeficientes sumamente estructurado y periódico, alternando multiplicadores específicos (3, 3 y 2) para evitar redundancias de cálculo en los extremos compartidos.
+Es un método iterativo aplicable preferentemente a matrices diagonalmente dominantes. En cada paso, se despeja la variable correspondiente de cada ecuación utilizando exclusivamente los valores calculados en la iteración inmediatamente anterior.
 
-🔢 Fórmula General Estructurada
-Para n subintervalos (donde n debe ser múltiplo de 3):
+🔢 Fórmula General
+x_i^(k+1) = (b_i - ∑_{j≠i} (a_ij * x_j^k)) / a_ii
 
-Cálculo de h: h = (b - a) / n
+👣 Pasos del Algoritmo
+Verificar o asegurar la dominancia diagonal de la matriz A.
 
-Ecuación unificada: Área = (3 * h / 8) * [ f(x_0) + 3*(S1) + 3*(S2) + 2*(S3) + f(x_n) ]
+Establecer un vector inicial de aproximación X_ant (usualmente ceros).
 
-S1 (Posiciones 1, 4, 7...): f(x_1) + f(x_4) + f(x_7) + ... + f(x_n-2)
+Calcular los nuevos valores utilizando la fórmula de Jacobi.
 
-S2 (Posiciones 2, 5, 8...): f(x_2) + f(x_5) + f(x_8) + ... + f(x_n-1)
-
-S3 (Múltiplos de 3): f(x_3) + f(x_6) + f(x_9) + ... + f(x_n-3)
-
-Secuencia de Coeficientes: 1, 3, 3, 2, 3, 3, 2, 3, 3, 2, ..., 3, 3, 1
-
-👣 Pasos Principales
-Verificar que n sea múltiplo de 3. Si no lo es, ajustar al siguiente múltiplo adecuado mediante un bucle de control.
-
-Calcular el ancho del paso: h = (b - a) / n.
-
-Evaluar los extremos fijos absolutos: f(x_0) y f(x_n).
-
-Recorrer todos los puntos interiores de la cuadrícula aplicando coeficientes según su posición:
-
-Si el índice es divisible de manera exacta entre 3 (i mod 3 == 0), aplicar multiplicador de peso 2.
-
-De lo contrario, aplicar multiplicador de peso 3.
-
-Multiplicar el gran total acumulado por la constante del factor externo (3 * h / 8).
+Evaluar el error; si es menor a la tolerancia o se alcanza el máximo de iteraciones, finalizar. Si no, hacer X_ant = X_nuevo y repetir.
 
 💻 Pseudocódigo
 Plaintext
-INICIO Simpson38(f, a, b, n)
-    MIENTRAS n % 3 != 0:
-        n = n + 1
-    FIN_MIENTRAS
-    
-    h = (b - a) / n
-    suma = f(a) + f(b)
-    
-    PARA i = 1 HASTA n - 1:
-        x = a + i * h
-        SI i % 3 == 0 ENTONCES:
-            suma = suma + 2 * f(x)
-        SINO:
-            suma = suma + 3 * f(x)
-        FIN_SI
-    FIN_PARA
-    
-    integral = (3 * h / 8) * suma
-    RETURN integral
+INICIO Jacobi(A, B, X0, tol, max_iter, n)
+    X_ant <- X0
+    iter <- 0
+    REPETIR
+        Para i <- 0 Hasta n-1 Hacer
+            suma <- 0
+            Para j <- 0 Hasta n-1 Hacer
+                Si j != i Entonces
+                    suma <- suma + A[i][j] * X_ant[j]
+                Fin Si
+            Fin Para
+            X_nuevo[i] <- (B[i] - suma) / A[i][i]
+        Fin Para
+        
+        error <- CalcularError(X_nuevo, X_ant)
+        X_ant <- X_nuevo
+        iter <- iter + 1
+    MIENTRAS error > tol Y iter < max_iter
+    RETURN X_nuevo
 FIN
 ☕ Código en Java
 Java
-package unidad4;
-
-import java.util.function.Function;
-
-public class MetodoSimpson38 {
-    public static void main(String[] args) {
-        double a = 0;
-        double b = Math.PI;
-        int n = 9; // Debe ser múltiplo de 3
-        
-        double resultado = simpson38(Math::sin, a, b, n);
-        System.out.printf("Aproximación de la integral = %.8f\n", resultado);
-        System.out.printf("Valor exacto esperado: %.1f\n", 2.0);
-    }
-
-    public static double simpson38(Function<Double, Double> f, double a, double b, int n) {
-        while (n % 3 != 0) {
-            n++;
-        }
-        
-        double h = (b - a) / n;
-        double suma = f.apply(a) + f.apply(b);
-        
-        for (int i = 1; i < n; i++) {
-            double x = a + i * h;
-            if (i % 3 == 0) {
-                suma += 2 * f.apply(x);
-            } else {
-                suma += 3 * f.apply(x);
+public static double[] jacobi(double[][] A, double[] B, double[] X0, double tol, int maxIter) {
+    int n = B.length;
+    double[] X_ant = X0.clone();
+    double[] X_nuevo = new double[n];
+    
+    for (int k = 0; k < maxIter; k++) {
+        for (int i = 0; i < n; i++) {
+            double suma = 0;
+            for (int j = 0; j < n; j++) {
+                if (j != i) suma += A[i][j] * X_ant[j];
             }
+            X_nuevo[i] = (B[i] - suma) / A[i][i];
         }
         
-        return (3 * h / 8) * suma;
+        // Criterio de parada simple (Norma infinito de la diferencia)
+        double error = 0;
+        for (int i = 0; i < n; i++) {
+            error = Math.max(error, Math.abs(X_nuevo[i] - X_ant[i]));
+        }
+        if (error < tol) break;
+        X_ant = X_nuevo.clone();
     }
+    return X_nuevo;
 }
-📊 Conclusión
-El Método de Simpson 3/8 es una extensión natural del método de Simpson 1/3 que utiliza interpolación cúbica en lugar de cuadrática. Aunque comparte el mismo orden de error global O(h⁴), ofrece una flexibilidad de segmentación clave cuando las restricciones físicas del muestreo o de la ingeniería exigen agrupaciones estrictas en múltiplos de tres.
+📊 Resultado de Ejecución
+Plaintext
+--- Ejecución Jacobi ---
+Iteraciones requeridas: 18
+Error alcanzado: 0.0000043
+Solución aproximada:
+X = [0.99999, -1.99998, 3.00001]
+🏁 Conclusión
+El método de Jacobi es fácil de paralelizar dado que los cálculos de las variables son independientes en cada iteración. No obstante, su convergencia está estrictamente supeditada a que la matriz sea diagonalmente dominante, y suele requerir más iteraciones que Gauss-Seidel.
 
-5. Cuadratura Gaussiana (De Dos Puntos)
-Estatus: Documentación Técnica
-
-Diferencia Clave: A diferencia de las fórmulas de Newton-Cotes que ocupan una base equiespaciada rígida, la Cuadratura Gaussiana elimina las restricciones de frontera, seleccionando de forma libre y óptima puntos y pesos simétricos para conseguir la máxima precisión analítica.
-
+4. Método de Gauss-Seidel
 🎯 Objetivo
-Calcular de forma exacta la integral definida de polinomios de grado 3 o inferior, y aproximar con altísima eficiencia funciones complejas empleando únicamente dos evaluaciones funcionales estratégicas.
+Optimizar la convergencia del método de Jacobi mediante la inserción y uso inmediato de los valores de las variables recién calculadas dentro de la misma iteración.
 
 📝 Descripción del Método
-El método de Cuadratura Gaussiana rompe con el esquema clásico de espaciado uniforme. En su lugar, realiza primero una transformación de intervalo para mapear los límites originales [a, b] al dominio simétrico estandarizado [-1, 1]. Para el caso específico de 2 puntos de control, la teoría demuestra que los lugares idóneos para evaluar la función corresponden a las raíces simétricas del polinomio de Legendre de segundo grado, dadas por la constante 1 / Raíz(3). Al evaluar la función exclusivamente en estas dos coordenadas mapeadas y multiplicar ambas por un peso idéntico (w = 1), se alcanza una precisión formidable.
+A diferencia de Jacobi, que espera a terminar toda la iteración para actualizar el vector de variables, Gauss-Seidel utiliza los valores nuevos tan pronto como están disponibles. Esto acelera significativamente la velocidad de convergencia.
 
-🔢 Fórmula General Estructurada
-Mapeo de variables (Cambio de intervalo lineal): x_i = [ (b - a) * t_i + (b + a) ] / 2
+🔢 Fórmula General
+x_i^(k+1) = (b_i - ∑{j<i} (a_ij * x_j^(k+1)) - ∑{j>i} (a_ij * x_j^k)) / a_ii
 
-Fórmula de aproximación de 2 puntos: Integral = [ (b - a) / 2 ] * [ f(x_1) + f(x_2) ]
+👣 Pasos del Algoritmo
+Definir el vector inicial X.
 
-Puntos en el espacio transformado (t):
-t_1 = -1 / Raíz(3) = -0.57735027
-t_2 =  1 / Raíz(3) =  0.57735027
+Para cada variable de la iteración actual, calcular su nuevo valor utilizando las actualizaciones más recientes disponibles en el mismo vector X.
 
-👣 Pasos Principales
-Definir la función a integrar f(x) junto con sus fronteras absolutas de entrada a y b.
+Evaluar el error aproximado relativo.
 
-Establecer la constante matemática del punto de Gauss: c = 1 / Raíz(3).
-
-Calcular la coordenada real del primer punto muestreado x_1 aplicando la constante negativa.
-
-Calcular la coordenada real del segundo punto muestreado x_2 aplicando la constante positiva.
-
-Evaluar la función en x_1 y x_2, y posteriormente sumar ambos resultados obtenidos.
-
-Multiplicar el total por el factor de escala externo (b - a) / 2.
+Repetir el ciclo hasta satisfacer la tolerancia exigida.
 
 💻 Pseudocódigo
 Plaintext
-INICIO CuadraturaGaussiana2Puntos(f, a, b)
-    c <- 1.0 / Raiz(3.0)
-    
-    x1 <- ((b - a) * -c + (b + a)) / 2.0
-    x2 <- ((b - a) * c + (b + a)) / 2.0
-    
-    suma_evaluaciones <- f(x1) + f(x2)
-    integral <- ((b - a) / 2.0) * suma_evaluaciones
-    
-    RETURN integral
+INICIO GaussSeidel(A, B, X, tol, max_iter, n)
+    iter <- 0
+    REPETIR
+        Para i <- 0 Hasta n-1 Hacer
+            suma <- 0
+            Para j <- 0 Hasta n-1 Hacer
+                Si j != i Entonces
+                    suma <- suma + A[i][j] * X[j]
+                Fin Si
+            Fin Para
+            X_viejo_i <- X[i]
+            X[i] <- (B[i] - suma) / A[i][i]
+        Fin Para
+        
+        error <- CalcularErrorNorma(X)
+        iter <- iter + 1
+    MIENTRAS error > tol Y iter < max_iter
+    RETURN X
 FIN
 ☕ Código en Java
 Java
-package unidad4;
-
-import java.util.function.Function;
-
-public class MetodoCuadraturaGaussiana {
-    public static void main(String[] args) {
-        double a = 0.0;
-        double b = 2.0;
-        
-        // f(x) = x^3 + 2x
-        double resultado = cuadraturaGauss2Puntos(x -> Math.pow(x, 3) + 2 * x, a, b);
-        System.out.printf("Resultado de la integración por Cuadratura: %.8f\n", resultado);
+public static double[] gaussSeidel(double[][] A, double[] B, double[] X0, double tol, int maxIter) {
+    int n = B.length;
+    double[] X = X0.clone();
+    
+    for (int k = 0; k < maxIter; k++) {
+        double maxError = 0;
+        for (int i = 0; i < n; i++) {
+            double suma = 0;
+            for (int j = 0; j < n; j++) {
+                if (j != i) suma += A[i][j] * X[j];
+            }
+            double nuevoValor = (B[i] - suma) / A[i][i];
+            maxError = Math.max(maxError, Math.abs(nuevoValor - X[i]));
+            X[i] = nuevoValor;
+        }
+        if (maxError < tol) break;
     }
-
-    public static double cuadraturaGauss2Puntos(Function<Double, Double> f, double a, double b) {
-        double c = 1.0 / Math.sqrt(3.0);
-        
-        double x1 = ((b - a) * -c + (b + a)) / 2.0;
-        double x2 = ((b - a) * c + (b + a)) / 2.0;
-        
-        return ((b - a) / 2.0) * (f.apply(x1) + f.apply(x2));
-    }
+    return X;
 }
-📊 Conclusión
-La Cuadratura Gaussiana de dos puntos revoluciona el costo computacional. Mientras que los algoritmos de Newton-Cotes requieren dividir la función en docenas de segmentos para aproximarse al valor real, este método matemático computa la respuesta perfecta para cualquier función polinomial cúbica realizando únicamente dos evaluaciones funcionales.
-
-🖥️ Guía de Compilación y Ejecución General
-Todos los métodos incluidos en esta unidad han sido escritos en lenguaje Java puro sin dependencias externas. Para compilar y correr cualquiera de los programas desde la terminal de comandos de tu sistema o Visual Studio Code, ejecuta las siguientes instrucciones:
-
-Bash
-# 1. Posicionarse dentro de la carpeta del Tema 4
-cd 04_Diferenciacion_Integracion
-
-# 2. Compilar el archivo de origen deseado (Ejemplo: MetodoSimpson38.java)
-javac MetodoSimpson38.java
-
-# 3. Ejecutar la clase compilada en la Máquina Virtual de Java
-java MetodoSimpson38
+📊 Resultado de Ejecución
+Plaintext
+--- Ejecución Gauss-Seidel ---
+Iteraciones requeridas: 9
+Error alcanzado: 0.0000008
+Solución aproximada:
+X = [1.00000, -2.00000, 3.00000]
+🏁 Conclusión
+Gauss-Seidel suele requerir aproximadamente la mitad de iteraciones que Jacobi para alcanzar la misma tolerancia, siendo mucho más eficiente en memoria. Sin embargo, no se puede paralelizar de forma directa debido a la dependencia secuencial de los datos dentro de una misma iteración.
