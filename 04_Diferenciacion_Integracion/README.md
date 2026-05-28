@@ -6,13 +6,13 @@ Este módulo comprende el estudio, diseño e implementación de algoritmos compu
 
 ## 🛠️ Catálogo de Métodos Desarrollados
 
-| Recurso / Código | Descripción Técnica | Enlace |
-| :--- | :--- | :---: |
-| **Diferenciación Numérica** | Fórmulas de aproximación por diferencias de 3 y 5 puntos (Adelante, Atrás y Centrales). | [☕ Código de Diferenciación](#1-diferenciación-numérica-3-y-5-puntos) |
-| **Método del Trapecio Compuesto** | Integración aproximada mediante la partición lineal de subintervalos. | [☕ Código de Trapecio](#2-método-del-trapecio-compuesto) |
-| **Regla de Simpson 1/3 Compuesta** | Integración basada en la aproximación por parábolas (polinomios de 2do grado). | [☕ Código de Simpson 1/3](#3-regla-de-simpson-13-compuesta) |
-| **Regla de Simpson 3/8 Compuesta** | Desarrollo analítico con polinomios cúbicos para segmentos múltiples de 3. | [☕ Código de Simpson 3/8](#4-regla-de-simpson-38-compuesta) |
-| **Cuadratura Gaussiana (2 Puntos)** | Evaluación óptima no equiespaciada utilizando las raíces de polinomios de Legendre. | [☕ Código de Cuadratura](#5-cuadratura-gaussiana-de-dos-puntos) |
+| Recurso / Código | Descripción Técnica | 
+| :--- | :--- | 
+| **Diferenciación Numérica** | Fórmulas de aproximación por diferencias de 3 y 5 puntos (Adelante, Atrás y Centrales). | 
+| **Método del Trapecio Compuesto** | Integración aproximada mediante la partición lineal de subintervalos. |
+| **Regla de Simpson 1/3 Compuesta** | Integración basada en la aproximación por parábolas (polinomios de 2do grado). | 
+| **Regla de Simpson 3/8 Compuesta** | Desarrollo analítico con polinomios cúbicos para segmentos múltiples de 3. | 
+| **Cuadratura Gaussiana (2 Puntos)** | Evaluación óptima no equiespaciada utilizando las raíces de polinomios de Legendre. | 
 
 ---
 
