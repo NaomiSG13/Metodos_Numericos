@@ -19,12 +19,14 @@ A continuación se detallan los temas cubiertos durante el semestre. Haz clic di
 
 | Unidad | Título del Tema |
 | :---: | :--- |
-| **01** | [01_Introduccion_MN](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/01_Introduccion_MN) |
-| **02** | [02_Metodos_Solucion_Ecuaciones](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/02_Metodos_Solucion_Ecuaciones) |
-| **03** | [03_Sistemas_Ecuaciones](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/03_Sistemas_Ecuaciones) |
-| **04** | [04_Diferenciacion_Integracion](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/04_Diferenciacion_Integracion) |
-| **05** | [05_Tema_5 (Interpolación y Ajuste de Funciones)](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/05_Tema_5) |
-| **06** | [06_Solucion_Ecuaciones_Diferenciales](https://github.com/NaomiSG13/Metodos_Numericos/tree/main/06_Solucion_Ecuaciones_Diferenciales) |
+| Unidad | Título del Tema |
+| :---: | :--- |
+| **01** | [01_Introduccion_MN](./01%20Introduccion%20MN) |
+| **02** | [02_Metodos_Solucion_Ecuaciones](./02%20Metodos%20Solucion%20Ecuaciones) |
+| **03** | [03_Sistemas_Ecuaciones](./03%20Sistemas%20Ecuaciones) |
+| **04** | [04_Diferenciacion_Integracion](./04%20Diferenciacion%20Integracion) |
+| **05** | [05_Tema_5 (Interpolación y Ajuste de Funciones)](./05%20Tema%205%20(Interpolaci%C3%B3n%20y%20Ajuste%20de%20Funciones)) |
+| **06** | [06_Tema_6 (Ecuaciones Diferenciales)](./06%20Tema%206%20(Ecuaciones%20Diferenciales)) |
 
 ### 📖 Índice de Introducciones Teóricas
 Si prefieres leer la introducción técnica y el desglose de los algoritmos dentro de este mismo documento, haz clic en cualquiera de los siguientes enlaces:
