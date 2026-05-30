@@ -4,246 +4,146 @@ En este apartado se presenta el estudio de algoritmos para la localización de r
 
 ---
 
-## 📉 Análisis de Errores
+## 1.1 Importancia de los Métodos Numéricos
 
-La precisión es fundamental en el cálculo numérico. Para evaluar la aproximación en cada ejercicio, se detallan las siguientes expresiones matemáticas:
+Los métodos numéricos transforman problemas formulados mediante cálculo, álgebra lineal o ecuaciones diferenciales en operaciones aritméticas simples. 
 
-* **Error Absoluto (Ea):**
-  Ea = |V - A|
-
-* **Error Relativo (Er):**
-  Er = |V - A| / |V|
-
-* **Error Porcentual (Ep):**
-  Ep = (|V - A| / |V|) * 100%
-
-> 💡 **Nota:** En las fórmulas anteriores, V representa el valor real esperado y A representa el valor aproximado obtenido por el método.
+Mientras que la matemática analítica busca una función exacta **y = f(x)**, los métodos numéricos buscan una colección de puntos numéricos **(x_i, y_i)** que aproximen el comportamiento real con un margen de error controlado. Su importancia radica en que permiten resolver sistemas no lineales o geometrías complejas que no tienen solución exacta por métodos tradicionales.
 
 ---
 
-## 🛠️ Métodos Desarrollados
+## 1.2 Conceptos Básicos
 
-### 1. Método de Bisección
-<details>
-<summary>📐 Haz clic aquí para desplegar la información de Bisección</summary>
+* **Cifra Significativa:** Es el número de dígitos que se usan con confianza. Para determinar el número de cifras significativas de un resultado basado en su error, se utiliza el **Criterio de Cómputo de Scarborough**. Si se garantiza que el error numérico es menor que un límite preestablecido, el resultado es correcto hasta **n** cifras significativas si el error aproximado porcentual cumple con:
+  `Es = (0.5 * 10^(2 - n))%`
 
-#### 🎯 Objetivo
-Encontrar una raíz real de una función continua en un intervalo cerrado donde exista un cambio de signo.
+* **Exactitud:** Proximidad de un valor calculado al valor verdadero.
+* **Precisión:** Proximidad de los valores calculados entre sí al repetir el método.
 
-#### 📝 Descripción del Método
-Es un método de búsqueda incremental que divide repetidamente a la mitad el intervalo que contiene a la raíz. Si la función cambia de signo en un subintervalo, la raíz se encuentra ahí; de lo contrario, está en el otro extremo. Es un método robusto y de convergencia segura, aunque lenta.
+* **Incertidumbre:** Intervalo en el que se asume que se encuentra el valor verdadero:
+  `Valor = Media ± U` (donde U es la incertidumbre).
+* **Sesgo:** Error sistemático medido como la diferencia entre la media de los datos calculados y el valor real.
 
-#### 🔢 Fórmula General
-c = (a + b) / 2
+---
 
-#### 👣 Pasos del Algoritmo
-1. Definir un intervalo [a, b] tal que f(a) * f(b) < 0.
-2. Calcular el punto medio c.
-3. Evaluar el criterio de parada (si |f(c)| < tolerancia o el error es menor al permitido, terminar).
-4. Si f(a) * f(c) < 0, la raíz está en [a, c], por lo que hacemos b = c.
-5. Si f(a) * f(c) > 0, la raíz está en [c, b], por lo que hacemos a = c.
-6. Repetir desde el paso 2 hasta cumplir el criterio de parada o alcanzar el límite de iteraciones.
+## 1.3 Fórmulas Analíticas de los Tipos de Errores
 
-#### 💻 Pseudocódigo
-```text
-INICIO Biseccion(f, a, b, tol, max_iter)
-    SI f(a) * f(b) >= 0 ENTONCES
-        MOSTRAR "El intervalo no es válido (no hay cambio de signo)"
-        TERMINAR
-    FIN SI
+En métodos numéricos, los errores se cuantifican de manera absoluta y relativa para evaluar la calidad de la aproximación:
 
-    iter <- 0
-    REPETIR
-        c <- (a + b) / 2
-        error <- ABS(b - a) / 2
-        
-        SI ABS(f(c)) < tol O error < tol ENTONCES
-            RETURN c
-        FIN SI
-        
-        SI f(a) * f(c) < 0 ENTONCES
-            b <- c
-        SINO
-            a <- c
-        FIN SI
-        
-        iter <- iter + 1
-    MIENTRAS iter < max_iter
+### Error Absoluto (E_t)
+Es la diferencia numérica directa entre el valor verdadero (V) y el valor aproximado (A):
+`E_t = |V - A|`
 
-    RETURN c
-FIN
-☕ Código en Java
-Java
-public static double biseccion(Function<Double, Double> f, double a, double b, double tol, int maxIter) {
-    if (f.apply(a) * f.apply(b) >= 0) {
-        throw new IllegalArgumentException("No hay cambio de signo en el intervalo dado.");
-    }
-    
-    double c = a;
-    for (int i = 0; i < maxIter; i++) {
-        c = (a + b) / 2;
-        
-        if (Math.abs(f.apply(c)) < tol || (b - a) / 2 < tol) {
-            return c;
-        }
-        
-        if (f.apply(a) * f.apply(c) < 0) {
-            b = c;
-        } else {
-            a = c;
-        }
-    }
-    return c;
-}
-📊 Resultado de Ejecución
-Plaintext
---- Ejecución Método de Bisección ---
-Función: x^2 - 4
-Intervalo: [0, 3]
-Raíz aproximada encontrada: 2.00000012
-Iteraciones requeridas: 22
-Error Absoluto estimado: 0.00000008
-🏁 Conclusión
-El método de Bisección es ideal como primera opción cuando no se conocen las derivadas de la función, ya que garantiza la convergencia. Sin embargo, su velocidad de convergencia es lineal, lo que lo hace ineficiente en términos de tiempo de cómputo comparado con métodos más avanzados.
+### Error Relativo Porcentual Verdadero (E_v)
+Para que el error no dependa de la escala o magnitud de la variable, se normaliza respecto al valor verdadero:
+`E_v = (|V - A| / |V|) * 100%`
 
-2. Método de la Falsa Posición (Regula Falsi)
-🎯 Objetivo
-Acelerar la convergencia del método de bisección aprovechando los valores numéricos de los extremos del intervalo.
+### Error Relativo Porcentual Aproximado (E_a)
+En problemas reales de ingeniería no conocemos el valor verdadero. Por lo tanto, el error se calcula comparando la aproximación actual con la aproximación obtenida en el paso anterior (esencial en métodos iterativos):
+`E_a = (|Aproximación_Actual - Aproximación_Anterior| / |Aproximación_Actual|) * 100%`
 
-📝 Descripción del Método
-A diferencia de bisección, que corta el intervalo estrictamente por la mitad, la Falsa Posición traza una línea recta (secante) entre los puntos de los extremos. La intersección de esta línea con el eje horizontal se convierte en la nueva aproximación de la raíz.
+### Error de Truncamiento (Serie de Taylor)
+Ocurre al interrumpir un proceso matemático infinito. La fórmula para modelar cualquier función suave mediante una aproximación polinomial es la Serie de Taylor:
+`f(x) = f(a) + f'(a)*(x-a) + (f''(a)/2!)*(x-a)^2 + ... + (f^n(a)/n!)*(x-a)^n + R_n`
 
-🔢 Fórmula General
-c = b - (f(b) * (a - b)) / (f(a) - f(b))
+---
 
-👣 Pasos del Algoritmo
-Definir un intervalo [a, b] tal que f(a) * f(b) < 0.
+## 1.4 Software de Cómputo Numérico
 
-Calcular el punto de aproximación c usando la fórmula de la secante.
+Las operaciones numéricas se ejecutan mediante vectores y matrices usando software que implementa librerías de alto rendimiento:
 
-Evaluar el criterio de parada.
+* **MATLAB / Octave:** Diseñados nativamente para el manejo de arreglos multidimensionales.
+* **Python:** Utiliza la librería **NumPy**, la cual está escrita en C y permite vectorizar operaciones aritméticas, evitando los lentos ciclos `for` nativos de Python.
 
-Si f(a) * f(c) < 0, la raíz está en [a, c], hacemos b = c.
+---
 
-Si no, la raíz está en [c, b], hacemos a = c.
+## 1.5 Métodos Iterativos y Criterios de Convergencia
 
-Repetir hasta cumplir las condiciones de parada.
+Un método iterativo calcula una secuencia de valores `{x_1, x_2, x_3, ..., x_k}` que busca aproximarse a la raíz o solución analítica. La ecuación general de recurrencia de un sistema iterativo unidimensional se expresa como:
+`x_(k+1) = g(x_k)`
 
-💻 Pseudocódigo
-Plaintext
-INICIO FalsaPosicion(f, a, b, tol, max_iter)
-    SI f(a) * f(b) >= 0 ENTONCES TERMINAR FIN SI
-    
-    iter <- 0
-    REPETIR
-        c <- b - (f(b) * (a - b)) / (f(a) - f(b))
-        
-        SI ABS(f(c)) < tol ENTONCES
-            RETURN c
-        FIN SI
-        
-        SI f(a) * f(c) < 0 ENTONCES b <- c SINO a <- c FIN SI
-        iter <- iter + 1
-    MIENTRAS iter < max_iter
-    RETURN c
-FIN
-☕ Código en Java
-Java
-public static double falsaPosicion(Function<Double, Double> f, double a, double b, double tol, int maxIter) {
-    double c = a;
-    for (int i = 0; i < maxIter; i++) {
-        c = b - (f.apply(b) * (a - b)) / (f.apply(a) - f.apply(b));
-        
-        if (Math.abs(f.apply(c)) < tol) {
-            return c;
-        }
-        
-        if (f.apply(a) * f.apply(c) < 0) {
-            b = c;
-        } else {
-            a = c;
-        }
-    }
-    return c;
-}
-📊 Resultado de Ejecución
-Plaintext
---- Ejecución Método de Falsa Posición ---
-Raíz aproximada encontrada: 1.99999985
-Iteraciones requeridas: 14
-Error Porcentual: 0.0000075%
-🏁 Conclusión
-Generalmente converge más rápido que la bisección porque aprovecha la tendencia de la curva. Su única desventaja es que, en funciones con curvaturas pronunciadas, uno de los extremos del intervalo puede quedarse fijo, ralentizando la convergencia.
+### Condición de Convergencia (Teorema del Punto Fijo)
+Para asegurar que un método iterativo va a aproximarse al resultado correcto en lugar de fallar (divergir), la derivada de la función iterativa `g(x)` evaluada en la vecindad de la solución debe cumplir con:
+`|g'(x)| < 1`
 
-3. Método de Newton-Raphson
-🎯 Objetivo
-Encontrar la raíz de una ecuación a partir de un valor inicial estimado, utilizando la derivada local de la función.
+---
 
-📝 Descripción del Método
-Es un método abierto (no requiere un intervalo cerrado). En cada iteración se traza una línea tangente a la curva en el punto actual; la intersección de esa tangente con el eje horizontal nos da la siguiente aproximación. Su velocidad de convergencia es cuadrática.
+## 🛠️ Algoritmos de Solución
 
-🔢 Fórmula General
-x_(i+1) = x_i - f(x_i) / f'(x_i)
+### Métodos Cerrados (Bracketing Methods)
+Requieren de dos valores iniciales (`x_l` inferior y `x_u` superior) que encierren a la raíz. Se basan en el **Teorema del Valor Intermedio**, el cual matemáticamente dice que si una función continua cambia de signo en un intervalo, existe al menos una raíz en ese intervalo:
+`f(x_l) * f(x_u) < 0`
 
-👣 Pasos del Algoritmo
-Elegir una aproximación inicial x0.
+### Métodos Abiertos (Open Methods)
+No necesitan encerrar la raíz, solo requieren uno o dos valores iniciales de arranque. Son algoritmos mucho más rápidos (convergencia veloz), pero corren el riesgo de divergir.
 
-Calcular la derivada de la función en ese punto: f'(xi).
+* **Algoritmo de Newton-Raphson:** Utiliza la recta tangente a la curva en el punto actual para proyectar el siguiente valor sobre el eje x. Es el algoritmo más eficiente si se conoce la derivada.
+  `x_(i+1) = x_i - f(x_i) / f'(x_i)`
 
-Si la derivada es muy cercana a 0, detener (error de división por cero).
+---
 
-Calcular el siguiente punto usando la fórmula de recurrencia.
+## 📝 Caso Práctico: Control de Calidad en Manufactura
 
-Repetir el proceso hasta que la diferencia entre pasos sucesivos o el valor de la función sea menor a la tolerancia.
+### Enunciado del Problema
+Un ingeniero de control de calidad está calibrando una máquina automatizada que corta ejes de transmisión para motores. El plano de diseño exige que el diámetro exacto de cada eje sea de **25.00 mm** (Valor Verdadero, V).
 
-💻 Pseudocódigo
-Plaintext
-INICIO NewtonRaphson(f, df, x0, tol, max_iter)
-    xi <- x0
-    iter <- 0
-    REPETIR
-        derivada <- df(xi)
-        SI ABS(derivada) < 1e-12 ENTONCES
-            MOSTRAR "Error: Derivada cercana a cero"
-            TERMINAR
-        FIN SI
-        
-        siguiente <- xi - f(xi) / derivada
-        
-        SI ABS(siguiente - xi) < tol O ABS(f(siguiente)) < tol ENTONCES
-            RETURN siguiente
-        FIN SI
-        
-        xi <- siguiente
-        iter <- iter + 1
-    MIENTRAS iter < max_iter
-    RETURN xi
-FIN
-☕ Código en Java
-Java
-public static double newtonRaphson(Function<Double, Double> f, Function<Double, Double> df, double x0, double tol, int maxIter) {
-    double xi = x0;
-    for (int i = 0; i < maxIter; i++) {
-        double derivada = df.apply(xi);
-        if (Math.abs(derivada) < 1e-12) {
-            throw new ArithmeticException("División por cero: la derivada es cero.");
-        }
-        
-        double siguiente = xi - (f.apply(xi) / derivada);
-        
-        if (Math.abs(siguiente - xi) < tol) {
-            return siguiente;
-        }
-        xi = siguiente;
-    }
-    return xi;
-}
-📊 Resultado de Ejecución
-Plaintext
---- Ejecución Método de Newton-Raphson ---
-Valor Inicial x0: 1.5
-Raíz aproximada encontrada: 2.00000000 
-Iteraciones requeridas: 4
-Error Absoluto estimado: 0.00000000
-🏁 Conclusión
-Es el método más rápido y eficiente (convergencia cuadrática), necesitando muy pocas iteraciones para alcanzar precisiones altas. Su gran desventaja es que requiere conocer explícitamente la función de la derivada y que, si el punto inicial está lejos de la raíz, el método puede divergir de forma abrupta.
+Para evaluar el estado de la máquina, se toma una muestra aleatoria de 5 ejes cortados consecutivamente y se miden con un micrómetro láser de alta precisión. Las lecturas obtenidas son: `[25.12, 25.15, 25.10, 25.14, 25.14]`.
+
+**Se solicita:**
+1. Calcular el Sesgo de la máquina de corte.
+2. Calcular la Incertidumbre de las mediciones utilizando la desviación estándar de la muestra.
+3. Determinar si el problema de la máquina es de Exactitud o de Precisión.
+
+### 💻 Código en Python para Automatizar el Análisis
+```python
+import numpy as np
+
+def analizar_mediciones(datos, valor_verdadero):
+    """
+    Calcula el sesgo, la media y la incertidumbre (desviación estándar) 
+    de un conjunto de datos experimentales.
+    """
+    datos = np.array(datos, dtype=float)
+    n = len(datos)
+
+    # 1. Calcular la media aritmética
+    media = np.mean(datos)
+
+    # 2. Calcular el Sesgo (Error Sistemático)
+    sesgo = media - valor_verdadero
+
+    # 3. Calcular la Incertidumbre basada en la Desviación Estándar Muestral (ddof=1 para n-1)
+    incertidumbre = np.std(datos, ddof=1)
+
+    # Imprimir Reporte Técnico
+    print("=" * 50)
+    print("        REPORTE DE INCERTIDUMBRE Y SESGO")
+    print("=" * 50)
+    print(f"Número de muestras analizadas : {n}")
+    print(f"Valor Nominal (Verdadero)     : {valor_verdadero:.2f} mm")
+    print(f"Media de las lecturas         : {media:.2f} mm")
+    print("-" * 50)
+    print(f"SESGO DETECTADO               : {sesgo:+.2f} mm")
+    print(f"INCERTIDUMBRE (Dispersión)    : ±{incertidumbre:.2f} mm")
+    print("-" * 50)
+
+    # Diagnóstico automatizado de Calidad
+    print("DIAGNÓSTICO DEL PROCESO:")
+    if abs(sesgo) > 0.05 and incertidumbre <= 0.03:
+        print("-> El sistema es PRECISO pero INEXACTO (Alto Sesgo, Baja Incertidumbre).")
+        print("   Acción: Calibrar el punto cero / offset de la máquina.")
+    elif abs(sesgo) <= 0.05 and incertidumbre > 0.05:
+        print("-> El sistema es EXACTO pero IMPRECISO (Bajo Sesgo, Alta Incertidumbre).")
+        print("   Acción: Revisar vibraciones o rigidez estructural del equipo.")
+    elif abs(sesgo) <= 0.05 and incertidumbre <= 0.03:
+        print("-> El sistema es EXACTO Y PRECISO. Operación óptima.")
+    else:
+        print("-> El sistema es INEXACTO E IMPRECISO. Requiere mantenimiento general.")
+    print("=" * 50)
+
+# --- Datos del Problema ---
+lecturas_ejes = [25.12, 25.15, 25.10, 25.14, 25.14]
+valor_diseno = 25.00
+
+# Ejecución del programa
+analizar_mediciones(lecturas_ejes, valor_diseno)
