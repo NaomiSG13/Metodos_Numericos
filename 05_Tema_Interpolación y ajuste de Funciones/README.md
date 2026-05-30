@@ -148,3 +148,66 @@ El contenido de esta unidad se divide en tres grandes áreas estratégicas:
 
 * **🏁 Conclusión**
   El coeficiente de Pearson constituye una métrica fundamental antes de realizar cualquier ajuste de curvas, ya que valida si una aproximación lineal es matemáticamente justificable o si se requiere recurrir a modelos de orden superior.
+---
+
+### 4. Método de Adams-Bashforth de 2 Pasos
+
+* **Diferencia Clave:** A diferencia de los métodos de Euler o Runge-Kutta (que son de un solo paso y solo miran el punto actual), Adams-Bashforth es un método de pasos múltiples que utiliza la información del punto actual y del punto inmediato anterior para proyectar la solución.
+
+#### 🎯 Objetivo
+Resolver ecuaciones diferenciales ordinarias aproximando el área bajo la curva de la derivada mediante un polinomio de interpolación que utiliza dos puntos previos conocidos.
+
+#### 🔢 Fórmula General
+y_(i+1) = y_i + (h / 2) * [ 3 * f(x_i, y_i) - f(x_{i-1}, y_{i-1}) ]
+
+#### 🏁 Conclusión
+Al aprovechar la historia previa del cálculo, ofrece una mayor precisión que el método de Euler sin necesidad de realizar múltiples evaluaciones de la función en cada paso como lo hace Runge-Kutta. Requiere de un método de un solo paso (como Euler o RK4) para calcular el primer punto de arranque (x_1, y_1).
+
+---
+
+### 5. Métodos Generalizados de Predicciones y Correcciones
+
+* **Diferencia Clave:** Combina las ventajas de los métodos abiertos (explícitos), que son fáciles de calcular, con la estabilidad superior de los métodos cerrados (implícitos).
+
+#### 🎯 Objetivo
+Optimizar la aproximación de un problema de valor inicial calculando una primera estimación de la altura (predicción) para luego refinarla iterativamente utilizando la pendiente calculada en ese nuevo punto (corrección).
+
+#### 🔢 Representación del Proceso
+1. **Predicador (Paso Explícito):** Se calcula un valor tentativo de la solución para el paso siguiente.
+2. **Corrector (Paso Implícito):** Se utiliza el valor tentativo para recalcular la pendiente final y ajustar el resultado mediante un promedio ponderado.
+
+#### 🏁 Conclusión
+Esta estrategia reduce drásticamente el error de truncamiento local y es la base de los algoritmos modernos de paso variable para resolver ecuaciones diferenciales de alta complejidad o sistemas de ecuaciones "rígidos" (stiff).
+
+---
+
+### 6. Aplicación: Ley de Enfriamiento de Newton
+
+* **Diferencia Clave:** Es un modelo físico real de primer orden que describe cómo la velocidad de cambio de la temperatura de un cuerpo es proporcional a la diferencia entre su propia temperatura y la del medio ambiente.
+
+#### 🎯 Objetivo
+Simular analítica y numéricamente la pérdida o ganancia de calor de un objeto a lo largo del tiempo dentro de un entorno con temperatura constante.
+
+#### 🔢 Fórmula del Modelo (EDO)
+dT / dt = -k * (T - T_ambiente)
+*(Donde T es la temperatura del objeto, t es el tiempo, k es la constante de enfriamiento del material y T_ambiente es la temperatura del entorno)*
+
+#### 🏁 Conclusión
+Esta aplicación sirve como el escenario perfecto para validar la precisión de los métodos de Euler y Heun, demostrando cómo el tamaño de paso (h) afecta directamente la velocidad con la que el modelo computacional converge hacia el equilibrio térmico real.
+
+---
+
+### 7. Aplicación: Sistema del Péndulo Simple
+
+* **Diferencia Clave:** Representa un sistema de ecuaciones diferenciales acopladas. Una ecuación diferencial de segundo orden (que involucra la aceleración angular) se transforma en dos ecuaciones de primer orden interdependientes.
+
+#### 🎯 Objetivo
+Modelar y simular las oscilaciones de un péndulo considerando el ángulo de desplazamiento y la velocidad angular en función del tiempo.
+
+#### 🔢 Representación del Sistema (EDOs de 1er Orden)
+* d(Angulo) / dt = Velocidad_angular
+* d(Velocidad_angular) / dt = -(g / L) * Seno(Angulo)
+*(Donde g es la aceleración de la gravedad y L es la longitud de la cuerda del péndulo)*
+
+#### 🏁 Conclusión
+Debido a la naturaleza no lineal del término con la función Seno, este sistema carece de una solución analítica exacta para ángulos grandes. Su resolución mediante Runge-Kutta de 4to Orden (RK4) es indispensable en la física computacional para garantizar la conservación de la energía y evitar que la simulación del movimiento se desfase de la realidad física.
