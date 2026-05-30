@@ -17,8 +17,7 @@ Este repositorio alberga el portafolio de evidencias y las prácticas de código
 
 A continuación se detallan los temas cubiertos durante el semestre. Haz clic directamente sobre el nombre del tema para abrir su carpeta de código correspondiente en GitHub:
 
-| Unidad | Título del Tema |
-| :---: | :--- |
+
 | Unidad | Título del Tema |
 | :---: | :--- |
 | **01** | [01_Introduccion_MN](./01%20Introduccion%20MN) |
